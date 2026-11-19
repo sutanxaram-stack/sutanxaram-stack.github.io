@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Guardião Anti-Golpes — Ativação Oficial</title>
     <style>
+      * {
+        box-sizing: border-box;
+      }
       body {
         margin: 0;
         min-height: 100vh;
@@ -14,114 +17,205 @@
         background: #0b1120;
         color: #f8fafc;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        padding: 20px;
+        padding: 18px;
       }
       .card {
         width: 100%;
-        max-width: 420px;
+        max-width: 440px;
         background: #131c31;
         border: 1px solid #1e293b;
-        border-radius: 20px;
-        padding: 28px 22px;
+        border-radius: 22px;
+        padding: 26px 20px;
         text-align: center;
         box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
       }
-      h1 {
-        font-size: 20px;
-        margin: 0 0 10px;
+      .badge {
+        display: inline-block;
+        padding: 5px 12px;
+        border-radius: 999px;
+        background: rgba(37, 99, 235, 0.18);
+        border: 1px solid rgba(59, 130, 246, 0.35);
+        color: #93c5fd;
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 12px;
       }
-      p {
+      h1 {
+        font-size: 21px;
+        margin: 0 0 8px;
+        color: #ffffff;
+      }
+      .subtitle {
         font-size: 14px;
         color: #cbd5e1;
         line-height: 1.5;
-        margin: 0 0 22px;
+        margin: 0 0 20px;
+      }
+      .spinner {
+        width: 34px;
+        height: 34px;
+        margin: 0 auto 14px;
+        border: 3px solid rgba(148, 163, 184, 0.25);
+        border-top-color: #3b82f6;
+        border-radius: 50%;
+        animation: spin 0.9s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .steps {
+        display: none;
+        flex-direction: column;
+        gap: 16px;
+        text-align: left;
+      }
+      .steps.visible {
+        display: flex;
+      }
+      .step-box {
+        background: #0f172a;
+        border: 1px solid #1e293b;
+        border-radius: 16px;
+        padding: 16px;
+      }
+      .step-label {
+        font-size: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin: 0 0 8px;
+      }
+      .step-label.step-1 {
+        color: #4ade80;
+      }
+      .step-label.step-2 {
+        color: #60a5fa;
       }
       .btn {
-        display: inline-block;
+        display: block;
         width: 100%;
-        box-sizing: border-box;
-        padding: 14px 18px;
-        border-radius: 12px;
-        background: #2563eb;
+        padding: 16px 18px;
+        border-radius: 14px;
         color: #ffffff;
-        font-weight: 700;
-        font-size: 15px;
-        text-decoration: none;
-      }
-      .hint {
-        margin-top: 14px;
-        margin-bottom: 0;
-        font-size: 12px;
-        color: #94a3b8;
-      }
-      .done-msg {
+        font-weight: 800;
         font-size: 16px;
-        font-weight: 600;
-        color: #86efac;
-        margin: 12px 0 0;
+        text-align: center;
+        text-decoration: none;
+        line-height: 1.3;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+      }
+      .btn-green {
+        background: #16a34a;
+      }
+      .btn-green:active {
+        background: #15803d;
+      }
+      .btn-blue {
+        background: #2563eb;
+      }
+      .btn-blue:active {
+        background: #1d4ed8;
+      }
+      .step-hint {
+        margin: 10px 0 0;
+        font-size: 13px;
+        color: #cbd5e1;
+        line-height: 1.45;
       }
     </style>
   </head>
   <body>
-    <main id="card-root" class="card">
+    <main class="card">
+      <div class="badge">Convite Oficial de Proteção</div>
       <h1>Guardião Anti-Golpes</h1>
-      <p id="status-desc">
-        Redirecionando automaticamente para o aplicativo Guardião Anti-Golpes...
-      </p>
-      <a id="open-app-btn" class="btn" href="guardiao://instalar">
-        Abrir no Guardião Anti-Golpes
-      </a>
-      <p id="status-hint" class="hint">
-        Se o aplicativo não abrir em instantes, toque no botão azul acima.
-      </p>
+
+      <section id="opening-state">
+        <div class="spinner" aria-hidden="true"></div>
+        <p class="subtitle">
+          Tentando abrir o aplicativo Guardião Anti-Golpes no seu aparelho...
+        </p>
+      </section>
+
+      <section id="fallback-steps" class="steps" aria-live="polite">
+        <p class="subtitle" style="text-align: center; margin-bottom: 4px;">
+          Se o aplicativo ainda não estiver instalado neste celular, siga os 2 passos abaixo:
+        </p>
+
+        <div class="step-box">
+          <div class="step-label step-1">Passo 1 — Instalar o Aplicativo</div>
+          <a
+            id="download-apk-btn"
+            class="btn btn-green"
+            href="https://sutanxaram-stack.github.io/downloads/GuardiaoAntiGolpes.apk"
+            download="GuardiaoAntiGolpes.apk"
+          >
+            Baixar Aplicativo Guardião Anti-Golpes
+          </a>
+          <p class="step-hint">
+            Ao concluir o download, abra o arquivo baixado e toque em <strong>"Instalar"</strong>.
+          </p>
+        </div>
+
+        <div class="step-box">
+          <div class="step-label step-2">Passo 2 — Ativar sua Proteção</div>
+          <a
+            id="activate-vip-btn"
+            class="btn btn-blue"
+            href="guardiao://instalar"
+          >
+            Ativar Minha Licença VIP
+          </a>
+          <p class="step-hint">
+            Logo após instalar o aplicativo, volte para esta página e toque no botão azul acima para ativar sua licença automaticamente.
+          </p>
+        </div>
+      </section>
     </main>
+
     <script>
       (function () {
         var qs = window.location.search || "";
         var target = "guardiao://instalar" + qs;
-        var btn = document.getElementById("open-app-btn");
-        var replaced = false;
+        var activateBtn = document.getElementById("activate-vip-btn");
+        var openingState = document.getElementById("opening-state");
+        var fallbackSteps = document.getElementById("fallback-steps");
+        var appOpened = false;
 
-        if (btn) {
-          btn.setAttribute("href", target);
+        if (activateBtn) {
+          activateBtn.setAttribute("href", target);
         }
 
-        function tryCloseAndReplace() {
-          try {
-            window.open("", "_self");
-          } catch (_) {}
-          try {
-            window.close();
-          } catch (_) {}
-
-          if (replaced) return;
-          replaced = true;
-
-          var root = document.getElementById("card-root");
-          if (root) {
-            root.innerHTML =
-              '<h1>Guardião Anti-Golpes</h1><p class="done-msg">Proteção ativada! Você já pode fechar esta página.</p>';
+        function showTwoSteps() {
+          if (openingState) {
+            openingState.style.display = "none";
           }
-        }
-
-        if (btn) {
-          btn.addEventListener("click", function () {
-            setTimeout(tryCloseAndReplace, 250);
-          });
+          if (fallbackSteps) {
+            fallbackSteps.classList.add("visible");
+          }
         }
 
         document.addEventListener("visibilitychange", function () {
           if (document.hidden) {
-            tryCloseAndReplace();
+            appOpened = true;
           }
         });
-        window.addEventListener("pagehide", tryCloseAndReplace);
+        window.addEventListener("pagehide", function () {
+          appOpened = true;
+        });
 
         try {
           window.location.href = target;
         } catch (_) {}
 
-        setTimeout(tryCloseAndReplace, 450);
+        setTimeout(function () {
+          if (!appOpened && !document.hidden) {
+            showTwoSteps();
+          } else {
+            showTwoSteps();
+          }
+        }, 1500);
       })();
     </script>
   </body>
