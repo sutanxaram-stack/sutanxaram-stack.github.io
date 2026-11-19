@@ -1,10 +1,14 @@
-[{
-  "relation": ["delegate_permission/common.handle_all_urls"],
-  "target": {
-    "namespace": "android_app",
-    "package_name": "com.guardiao.antigolpes",
-    "sha256_cert_fingerprints": [
-      "37:3E:A2:C6:16:FE:C3:99:80:49:94:E7:25:7B:14:0C:48:C5:11:02:B0:D4:EF:4F:FD:BE:66:86:3E:6A:DB:54"
-    ]
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.guardiao.antigolpes",
+      "sha256_cert_fingerprints": [
+        "93:A7:68:40:02:AD:F4:C8:E3:F5:D5:52:A7:98:ED:18:FC:F0:B6:18:98:57:7A:D0:A6:FC:23:B3:B0:7F:58:DA"
+      ]
+    }
   }
-}]
+]
