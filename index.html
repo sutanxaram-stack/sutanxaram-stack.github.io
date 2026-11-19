@@ -50,22 +50,29 @@
       }
       .hint {
         margin-top: 14px;
+        margin-bottom: 0;
         font-size: 12px;
         color: #94a3b8;
+      }
+      .done-msg {
+        font-size: 16px;
+        font-weight: 600;
+        color: #86efac;
+        margin: 12px 0 0;
       }
     </style>
   </head>
   <body>
-    <main class="card">
+    <main id="card-root" class="card">
       <h1>Guardião Anti-Golpes</h1>
-      <p>
-        Link oficial de ativação. Se o aplicativo já estiver instalado no seu aparelho Android, toque no botão abaixo para abrir diretamente na tela de instalação.
+      <p id="status-desc">
+        Redirecionando automaticamente para o aplicativo Guardião Anti-Golpes...
       </p>
       <a id="open-app-btn" class="btn" href="guardiao://instalar">
         Abrir no Guardião Anti-Golpes
       </a>
-      <p class="hint">
-        Caso tenha recebido um código no WhatsApp, copie a mensagem e abra o aplicativo Guardião Anti-Golpes.
+      <p id="status-hint" class="hint">
+        Se o aplicativo não abrir em instantes, toque no botão azul acima.
       </p>
     </main>
     <script>
@@ -73,9 +80,48 @@
         var qs = window.location.search || "";
         var target = "guardiao://instalar" + qs;
         var btn = document.getElementById("open-app-btn");
+        var replaced = false;
+
         if (btn) {
           btn.setAttribute("href", target);
         }
+
+        function tryCloseAndReplace() {
+          try {
+            window.open("", "_self");
+          } catch (_) {}
+          try {
+            window.close();
+          } catch (_) {}
+
+          if (replaced) return;
+          replaced = true;
+
+          var root = document.getElementById("card-root");
+          if (root) {
+            root.innerHTML =
+              '<h1>Guardião Anti-Golpes</h1><p class="done-msg">Proteção ativada! Você já pode fechar esta página.</p>';
+          }
+        }
+
+        if (btn) {
+          btn.addEventListener("click", function () {
+            setTimeout(tryCloseAndReplace, 250);
+          });
+        }
+
+        document.addEventListener("visibilitychange", function () {
+          if (document.hidden) {
+            tryCloseAndReplace();
+          }
+        });
+        window.addEventListener("pagehide", tryCloseAndReplace);
+
+        try {
+          window.location.href = target;
+        } catch (_) {}
+
+        setTimeout(tryCloseAndReplace, 450);
       })();
     </script>
   </body>
