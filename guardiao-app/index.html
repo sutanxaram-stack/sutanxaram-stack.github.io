@@ -376,7 +376,7 @@
 
       <section id="install-panel" class="install-panel" aria-live="polite">
         <div class="download-status">
-          O download do Guardião Anti-Golpes foi iniciado automaticamente!
+          Seu convite já foi salvo e o download do Guardião Anti-Golpes começou automaticamente!
         </div>
 
         <a
@@ -417,16 +417,48 @@
     <script>
       (function () {
         var APK_URL = "https://sutanxaram-stack.github.io/downloads/GuardiaoAntiGolpes.apk";
+        var fullUrl = window.location.href || "";
         var qs = window.location.search || "";
         var appDeepLink = "guardiao://instalar" + qs;
         var openingState = document.getElementById("opening-state");
         var installPanel = document.getElementById("install-panel");
+        var downloadBtn = document.getElementById("download-apk-btn");
         var appOpened = false;
         var downloadTriggered = false;
+
+        function fallbackCopyText(text) {
+          try {
+            var el = document.createElement("textarea");
+            el.value = text;
+            el.setAttribute("readonly", "");
+            el.style.position = "fixed";
+            el.style.left = "-9999px";
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand("copy");
+            document.body.removeChild(el);
+          } catch (_) {}
+        }
+
+        function copyInviteUrlToClipboard() {
+          if (!qs && fullUrl.indexOf("token=") === -1) return;
+          try {
+            if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+              navigator.clipboard.writeText(fullUrl).catch(function () {
+                fallbackCopyText(fullUrl);
+              });
+            } else {
+              fallbackCopyText(fullUrl);
+            }
+          } catch (_) {
+            fallbackCopyText(fullUrl);
+          }
+        }
 
         function triggerAutomaticDownload() {
           if (downloadTriggered) return;
           downloadTriggered = true;
+          copyInviteUrlToClipboard();
           try {
             var a = document.createElement("a");
             a.href = APK_URL;
@@ -451,6 +483,12 @@
           }
         }
 
+        if (downloadBtn) {
+          downloadBtn.addEventListener("click", function () {
+            copyInviteUrlToClipboard();
+          });
+        }
+
         document.addEventListener("visibilitychange", function () {
           if (document.hidden) {
             appOpened = true;
@@ -460,12 +498,15 @@
           appOpened = true;
         });
 
+        copyInviteUrlToClipboard();
+
         try {
           window.location.href = appDeepLink;
         } catch (_) {}
 
         setTimeout(function () {
           if (!appOpened && !document.hidden) {
+            copyInviteUrlToClipboard();
             showInstallGuide();
             triggerAutomaticDownload();
           }
