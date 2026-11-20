@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Guardião Anti-Golpes — Atualizar para Versão 26.005</title>
+    <meta
+      name="description"
+      content="Atualize seu Guardião Anti-Golpes para a Versão 26.005 sem desinstalar o aplicativo atual. Seus dados e histórico continuam 100% salvos."
+    />
+    <meta property="og:title" content="🛡️ Atualização Oficial — Guardião Anti-Golpes (Versão 26.005)" />
+    <meta
+      property="og:description"
+      content="Toque para baixar e atualizar direto no navegador. Não desinstale o app atual: seus dados continuam 100% salvos."
+    />
+    <meta property="og:type" content="website" />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        color: #ffffff;
+        background:
+          radial-gradient(120% 70% at 50% 0%, rgba(96, 165, 250, 0.35) 0%, rgba(59, 130, 246, 0.14) 45%, transparent 75%),
+          radial-gradient(85% 55% at 88% 92%, rgba(56, 189, 248, 0.18) 0%, transparent 65%),
+          linear-gradient(180deg, #3B82F6 0%, #2563EB 34%, #1D4ED8 70%, #1E40AF 100%);
+        background-color: #2563EB;
+        background-attachment: fixed;
+      }
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px 16px;
+      }
+      .glass-card-strong {
+        width: 100%;
+        max-width: 440px;
+        background: linear-gradient(155deg, rgba(255, 255, 255, 0.19) 0%, rgba(30, 64, 175, 0.48) 100%);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.30);
+        box-shadow: 0 18px 42px -10px rgba(15, 23, 42, 0.36), inset 0 1px 0 0 rgba(255, 255, 255, 0.25);
+        border-radius: 26px;
+        padding: 24px 20px;
+        text-align: center;
+      }
+      .version-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.16);
+        border: 1px solid rgba(255, 255, 255, 0.32);
+        color: #ffffff;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+      }
+      .version-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background: #34d399;
+        box-shadow: 0 0 8px rgba(52, 211, 153, 0.9);
+      }
+      .shield-wrap {
+        position: relative;
+        width: 118px;
+        height: 118px;
+        margin: 10px auto 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .shield-halo {
+        position: absolute;
+        width: 112px;
+        height: 112px;
+        border-radius: 999px;
+        background: radial-gradient(circle, rgba(147, 197, 253, 0.45) 0%, rgba(59, 130, 246, 0.22) 52%, rgba(30, 64, 175, 0) 76%);
+        filter: blur(16px);
+        animation: pulseGlow 3.5s ease-in-out infinite;
+        pointer-events: none;
+      }
+      .shield-svg {
+        position: relative;
+        z-index: 2;
+        width: 114px;
+        height: 114px;
+        overflow: visible;
+        filter: drop-shadow(0 10px 22px rgba(15, 23, 42, 0.38));
+        animation: floatingEmblem 4s ease-in-out infinite;
+      }
+      @keyframes wingFlapLeft {
+        0%, 100% {
+          transform: rotate(0deg) translateY(0px);
+        }
+        50% {
+          transform: rotate(-5.5deg) translateY(-5px) scale(1.03);
+        }
+      }
+      @keyframes wingFlapRight {
+        0%, 100% {
+          transform: rotate(0deg) translateY(0px);
+        }
+        50% {
+          transform: rotate(-5.5deg) translateY(-5px) scale(1.03);
+        }
+      }
+      @keyframes pulseGlow {
+        0%, 100% {
+          opacity: 0.65;
+          transform: scale(0.96);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.08);
+        }
+      }
+      @keyframes floatingEmblem {
+        0%, 100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-6px);
+        }
+      }
+      .wing-left-animated {
+        transform-origin: 200px 146px;
+        transform-box: view-box;
+        animation: wingFlapLeft 3.2s ease-in-out infinite;
+      }
+      .wing-right-animated {
+        transform-origin: 200px 146px;
+        transform-box: view-box;
+        animation: wingFlapRight 3.2s ease-in-out infinite;
+      }
+      h1 {
+        margin: 4px 0 6px;
+        font-size: 22px;
+        font-weight: 900;
+        color: #ffffff;
+        letter-spacing: -0.015em;
+        line-height: 1.25;
+      }
+      .subtitle {
+        margin: 0 0 18px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #E0F2FE;
+        line-height: 1.45;
+      }
+      .warning-box {
+        background: rgba(251, 191, 36, 0.22);
+        border: 2px solid rgba(253, 224, 71, 0.85);
+        border-radius: 18px;
+        padding: 15px 14px;
+        text-align: left;
+        margin-bottom: 18px;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.22);
+      }
+      .warning-title {
+        margin: 0 0 4px;
+        font-size: 14.5px;
+        font-weight: 900;
+        color: #ffffff;
+        line-height: 1.35;
+      }
+      .warning-sub {
+        margin: 0;
+        font-size: 13px;
+        font-weight: 600;
+        color: #fef9c3;
+        line-height: 1.4;
+      }
+      .btn-download {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        padding: 17px 18px;
+        border-radius: 18px;
+        background: #10b981;
+        border: 2px solid rgba(167, 243, 208, 0.9);
+        color: #022c22;
+        font-family: inherit;
+        font-size: 16.5px;
+        font-weight: 900;
+        text-decoration: none;
+        text-align: center;
+        line-height: 1.25;
+        cursor: pointer;
+        box-shadow: 0 14px 30px rgba(6, 78, 59, 0.42);
+        transition: transform 0.15s ease, background-color 0.15s ease;
+      }
+      .btn-download:hover {
+        background: #34d399;
+      }
+      .btn-download:active {
+        transform: scale(0.98);
+      }
+      .download-feedback {
+        display: none;
+        margin-top: 12px;
+        padding: 11px 12px;
+        border-radius: 14px;
+        background: rgba(16, 185, 129, 0.24);
+        border: 1px solid rgba(167, 243, 208, 0.6);
+        color: #ecfdf5;
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.4;
+      }
+      .download-feedback.visible {
+        display: block;
+      }
+      .guide-card {
+        margin-top: 18px;
+        background: rgba(255, 255, 255, 0.11);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 18px;
+        padding: 14px;
+        text-align: left;
+      }
+      .guide-title {
+        margin: 0 0 10px;
+        font-size: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #E0F2FE;
+        text-align: center;
+      }
+      .step-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+      }
+      .step-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        background: rgba(255, 255, 255, 0.09);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 12px;
+        padding: 10px 11px;
+        font-size: 13.5px;
+        line-height: 1.4;
+        color: #ffffff;
+      }
+      .step-num {
+        flex-shrink: 0;
+        min-width: 24px;
+        height: 24px;
+        border-radius: 999px;
+        background: rgba(16, 185, 129, 0.9);
+        color: #022c22;
+        font-size: 12.5px;
+        font-weight: 900;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 1px;
+      }
+      .step-item strong {
+        color: #a7f3d0;
+      }
+      .footer-note {
+        margin: 14px 0 0;
+        font-size: 11.5px;
+        color: rgba(224, 242, 254, 0.85);
+        line-height: 1.4;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="glass-card-strong">
+      <div class="version-pill">
+        <span class="version-dot" aria-hidden="true"></span>
+        <span>Versão 26.005</span>
+      </div>
+
+      <div class="shield-wrap" aria-hidden="true">
+        <div class="shield-halo"></div>
+        <svg class="shield-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+          <defs>
+            <linearGradient id="shieldGradient" x1="250" y1="50" x2="250" y2="280" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#2563EB" />
+              <stop offset="45%" stop-color="#1D4ED8" />
+              <stop offset="100%" stop-color="#0B1329" />
+            </linearGradient>
+            <linearGradient id="wingBodyGrad" x1="60" y1="40" x2="220" y2="220" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#FFFFFF" />
+              <stop offset="65%" stop-color="#FFFFFF" />
+              <stop offset="90%" stop-color="#F8FAFC" />
+              <stop offset="100%" stop-color="#E2E8F0" />
+            </linearGradient>
+            <linearGradient id="wingFeathersGrad" x1="60" y1="120" x2="160" y2="350" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#FFFFFF" />
+              <stop offset="70%" stop-color="#FFFFFF" />
+              <stop offset="92%" stop-color="#F8FAFC" />
+              <stop offset="100%" stop-color="#CBD5E1" />
+            </linearGradient>
+            <linearGradient id="phoneScreenGrad" x1="250" y1="110" x2="250" y2="210" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#059669" />
+              <stop offset="100%" stop-color="#022c22" />
+            </linearGradient>
+            <g id="shield-wing-template">
+              <path
+                d="M 218 142 C 223 147, 224 156, 219 162 C 214 168, 204 168, 198 163 C 190 178, 182 196, 178 214 C 172 236, 166 260, 154 282 C 142 304, 126 322, 104 336 C 94 342, 82 349, 72 355 C 66 358, 62 355, 63 348 C 65 330, 68 304, 68 280 C 68 245, 62 205, 68 168 C 74 130, 92 88, 122 62 C 140 46, 165 42, 185 58 C 202 72, 212 96, 214 118 C 215 127, 215 136, 218 142 Z"
+                fill="#CBD5E1"
+                opacity="0.9"
+              />
+              <path
+                d="M 182 60 C 158 45, 134 50, 114 68 C 86 92, 70 132, 66 170 C 62 210, 68 250, 68 285 C 68 308, 65 332, 63 348 C 64 353, 68 355, 73 350 C 82 342, 94 330, 102 316 L 102 296 C 112 284, 122 268, 128 250 L 130 236 C 140 222, 150 204, 156 186 L 160 174 C 168 162, 176 150, 184 140 C 188 136, 194 132, 200 134 C 204 136, 206 140, 206 145 C 206 152, 200 158, 194 158 C 188 158, 182 154, 180 148 C 176 136, 182 110, 186 96 C 188 84, 188 70, 182 60 Z"
+                fill="url(#wingBodyGrad)"
+              />
+              <path
+                d="M 66 170 C 62 212, 66 255, 68 290 C 69 314, 66 338, 64 352 C 66 356, 72 355, 76 348 C 86 332, 98 306, 99 285 C 100 258, 96 230, 94 205 C 84 192, 74 180, 66 170 Z"
+                fill="url(#wingFeathersGrad)"
+                stroke="#CBD5E1"
+                stroke-width="1.2"
+              />
+              <path
+                d="M 94 208 C 96 235, 99 264, 98 288 C 97 308, 90 324, 84 336 C 86 338, 90 338, 94 332 C 106 316, 118 292, 122 268 C 125 244, 120 222, 116 200 L 94 208 Z"
+                fill="url(#wingFeathersGrad)"
+                stroke="#CBD5E1"
+                stroke-width="1.1"
+              />
+              <path
+                d="M 116 202 C 120 224, 124 248, 122 270 C 120 286, 114 300, 108 310 C 111 312, 115 311, 119 304 C 130 288, 140 266, 142 242 C 144 222, 138 204, 134 186 L 116 202 Z"
+                fill="url(#wingFeathersGrad)"
+                stroke="#CBD5E1"
+                stroke-width="1.1"
+              />
+              <path
+                d="M 134 188 C 138 206, 142 226, 142 244 C 142 258, 138 270, 132 278 C 135 280, 139 278, 143 272 C 152 256, 160 236, 162 216 C 163 198, 156 182, 152 168 L 134 188 Z"
+                fill="url(#wingFeathersGrad)"
+                stroke="#CBD5E1"
+                stroke-width="1.1"
+              />
+              <path
+                d="M 152 170 C 156 184, 161 202, 162 218 C 162 230, 158 240, 152 248 C 155 250, 159 248, 163 242 C 172 228, 178 210, 180 192 C 181 178, 174 165, 170 154 L 152 170 Z"
+                fill="url(#wingFeathersGrad)"
+                stroke="#CBD5E1"
+                stroke-width="1.1"
+              />
+              <path
+                d="M 170 156 C 174 168, 179 182, 180 194 C 180 204, 176 212, 172 218 C 175 220, 178 218, 182 212 C 189 200, 194 185, 194 172 C 194 162, 188 152, 184 144 L 170 156 Z"
+                fill="url(#wingFeathersGrad)"
+                stroke="#CBD5E1"
+                stroke-width="1.1"
+              />
+              <path d="M 88 140 C 94 170, 98 200, 98 226 C 99 232, 106 230, 108 224 C 114 200, 118 174, 116 148 Z" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1" />
+              <path d="M 116 142 C 122 168, 126 195, 126 216 C 127 221, 133 219, 135 214 C 140 192, 144 168, 140 144 Z" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1" />
+              <path d="M 140 140 C 146 162, 150 184, 150 202 C 151 206, 156 204, 158 200 C 162 180, 166 160, 162 138 Z" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1" />
+              <path
+                d="M 182 60 C 158 45, 134 50, 114 68 C 90 90, 76 124, 74 156 C 92 160, 110 154, 126 144 C 142 134, 158 126, 174 124 C 182 123, 192 126, 198 132 C 204 136, 206 140, 206 145 C 206 152, 200 158, 194 158 C 188 158, 182 154, 180 148 C 176 136, 182 110, 186 96 C 188 84, 188 70, 182 60 Z"
+                fill="url(#wingBodyGrad)"
+                stroke="#CBD5E1"
+                stroke-width="1.2"
+              />
+              <path d="M 74 210 C 74 250, 76 295, 72 335" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" opacity="0.75" />
+              <path d="M 102 220 C 104 250, 106 280, 98 310" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" opacity="0.7" />
+              <path d="M 124 215 C 126 240, 126 265, 120 288" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" opacity="0.65" />
+              <circle cx="200" cy="146" r="11" fill="#CBD5E1" />
+              <circle cx="200" cy="146" r="8" fill="url(#wingBodyGrad)" />
+              <circle cx="198" cy="144" r="3" fill="#FFFFFF" opacity="0.8" />
+            </g>
+          </defs>
+          <g transform="translate(256, 256) scale(0.92) translate(-250, -185)">
+            <g class="wing-left-animated">
+              <use href="#shield-wing-template" />
+            </g>
+            <g transform="translate(500, 0) scale(-1, 1)">
+              <g class="wing-right-animated">
+                <use href="#shield-wing-template" />
+              </g>
+            </g>
+            <g>
+              <path
+                d="M 250 52 L 182 78 V 152 C 182 220, 226 264, 250 274 C 274 264, 318 220, 318 152 V 78 Z"
+                fill="#60A5FA"
+                stroke="#DBEAFE"
+                stroke-width="4"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M 250 58 L 188 82 V 152 C 188 215, 228 256, 250 266 C 272 256, 312 215, 312 152 V 82 Z"
+                fill="url(#shieldGradient)"
+                stroke="#2563EB"
+                stroke-width="1.8"
+              />
+              <path
+                d="M 250 58 L 188 82 V 152 C 188 215, 228 256, 250 266 L 250 58 Z"
+                fill="#FFFFFF"
+                fill-opacity="0.12"
+              />
+              <path
+                d="M 250 67 L 196 88 V 152 C 196 206, 230 244, 250 252 C 270 244, 304 206, 304 152 V 88 Z"
+                stroke="#FFFFFF"
+                stroke-width="1.4"
+                stroke-opacity="0.3"
+                stroke-dasharray="4 2"
+              />
+            </g>
+            <g>
+              <rect x="226" y="108" width="48" height="90" rx="9" fill="#080C14" stroke="#34D399" stroke-width="2.4" />
+              <rect x="230" y="116" width="40" height="74" rx="4" fill="#03251E" />
+              <rect x="230" y="116" width="40" height="74" rx="4" fill="url(#phoneScreenGrad)" fill-opacity="0.3" />
+              <rect x="242" y="111" width="16" height="2.5" rx="1.2" fill="#94A3B8" />
+              <circle cx="260" cy="112.2" r="1.2" fill="#64748B" />
+              <g transform="translate(241, 136)">
+                <path d="M 9 0 L 1 3.5 V 10 C 1 15, 6 18.5, 9 20 C 12 18.5, 17 15, 17 10 V 3.5 Z" fill="#10B981" />
+                <path d="M 5.5 9.5 L 8 12 L 13 6.5" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              </g>
+              <rect x="243" y="182" width="14" height="2" rx="1" fill="#CBD5E1" />
+            </g>
+            <g fill="#FDE047" opacity="0.95">
+              <polygon points="172,46 175,54 183,57 175,60 172,68 169,60 161,57 169,54" transform="scale(0.7) translate(75, 12)" />
+              <polygon points="328,46 331,54 339,57 331,60 328,68 325,60 317,57 325,54" transform="scale(0.7) translate(142, 12)" />
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <h1>Atualização Oficial do GUARDIÃO</h1>
+      <p class="subtitle">
+        Baixe a nova <strong>Versão 26.005</strong> direto pelo navegador para manter sua proteção sempre ativa.
+      </p>
+
+      <section class="warning-box" aria-label="Aviso importante">
+        <p class="warning-title">
+          ⚠️ NÃO DESINSTALE O APP ATUAL (Seus dados e histórico continuam 100% salvos)
+        </p>
+        <p class="warning-sub">
+          Basta baixar e tocar em <strong>Atualizar</strong> por cima do aplicativo já instalado no seu celular.
+        </p>
+      </section>
+
+      <a
+        id="download-update-btn"
+        href="./GuardiaoAntiGolpes.apk?v=26.005"
+        download="GuardiaoAntiGolpes.apk"
+        class="btn-download"
+      >
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="7 10 12 15 17 10" />
+          <line x1="12" y1="15" x2="12" y2="3" />
+        </svg>
+        <span>BAIXAR E ATUALIZAR AGORA</span>
+      </a>
+
+      <div id="download-feedback" class="download-feedback" aria-live="polite">
+        Download da Versão 26.005 iniciado! Confirme <strong>"Baixar mesmo assim"</strong> caso apareça na tela.
+      </div>
+
+      <section class="guide-card">
+        <h2 class="guide-title">Como atualizar em 2 toques simples</h2>
+        <ul class="step-list">
+          <li class="step-item">
+            <span class="step-num">1</span>
+            <span>
+              Se o navegador perguntar, toque em <strong>"Baixar mesmo assim"</strong>.
+            </span>
+          </li>
+          <li class="step-item">
+            <span class="step-num">2</span>
+            <span>
+              Quando concluir o download, toque em <strong>"Abrir"</strong> e depois em <strong>"Atualizar"</strong> (sem desinstalar).
+            </span>
+          </li>
+        </ul>
+      </section>
+
+      <p class="footer-note">
+        Guardião Anti-Golpes • Atualização Segura • Versão 26.005
+      </p>
+    </main>
+
+    <script>
+      (function () {
+        var btn = document.getElementById("download-update-btn");
+        var feedback = document.getElementById("download-feedback");
+        if (btn && feedback) {
+          btn.addEventListener("click", function () {
+            feedback.classList.add("visible");
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>
